@@ -9,4 +9,4 @@ node_modules
 .vuepress/sidebar.ts
 .vuepress/public/wiki/**/*
 git0/
-config.json
+deploy/config.json

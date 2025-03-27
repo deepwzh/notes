@@ -21,7 +21,9 @@ jobs:
           # 如果你文档需要 Git 子模块，取消注释下一行
           # submodules: true
 
-
+      - name: 飞书文档同步
+        container: docker.io/deepwzh/feishu2md
+        run: python3 build.py
 
       - name: 设置 Node.js
         uses: actions/setup-node@v3
