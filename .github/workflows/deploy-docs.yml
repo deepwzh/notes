@@ -22,7 +22,7 @@ jobs:
           # submodules: true
 
       - name: 飞书文档同步
-        container: docker.io/deepwzh/feishu2md
+        uses: docker://deepwzh/feishu2md
         run: python3 build.py
 
       - name: 设置 Node.js
