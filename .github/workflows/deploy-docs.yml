@@ -24,10 +24,7 @@ jobs:
       - name: 飞书文档同步
         uses: docker://deepwzh/feishu2md
         with:
-          args: >
-            mkdir -p /github/home/.config/feishu2md &&
-            echo '${{ secrets.FEISHU2MD_CONFIG }}' > /github/home/.config/feishu2md/config.json &&
-            python3 build.py
+          args: mkdir -p /github/home/.config/feishu2md && echo '${{ secrets.FEISHU2MD_CONFIG }}' > /github/home/.config/feishu2md/config.json && python3 build.py
 
       - name: 设置 Node.js
         uses: actions/setup-node@v3
