@@ -20,16 +20,14 @@ jobs:
           fetch-depth: 0
           # 如果你文档需要 Git 子模块，取消注释下一行
           # submodules: true
-      - name: Generate config file
-        run: |
-          mkdir -p /github/home/.config/feishu2md
-          echo '${{ secrets.FEISHU2MD_CONFIG }}' > /github/home/.config/feishu2md/config.json  # 直接输出为文件
-          cat /github/home/.config/feishu2md/config.json
 
       - name: 飞书文档同步
         uses: docker://deepwzh/feishu2md
         with:
-          args: python3 build.py
+          args: |
+            mkdir -p /github/home/.config/feishu2md
+            echo '${{ secrets.FEISHU2MD_CONFIG }}' > /github/home/.config/feishu2md/config.json
+            python3 build.py
 
       - name: 设置 Node.js
         uses: actions/setup-node@v3
