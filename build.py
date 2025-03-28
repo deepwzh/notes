@@ -34,7 +34,7 @@ class WikiGenerator:
         self.static_base_dir = os.path.join(self.vuepress_dir, "public", "wiki")
 
         self.roadmap_lists = []
-        self.max_depth = 1
+        self.max_depth = 10
 
     
     def get_realtive_path_of_wiki(self, wiki_name, path: dict):
