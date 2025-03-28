@@ -171,14 +171,29 @@ class WikiGenerator:
         """
         遍历所有的目录，将所有的目录名加一个.dir后缀
         """
+        # 先收集所有需要重命名的目录，并按路径深度排序（从深到浅）
+        dirs_to_rename = []
         for root, dirs, files in os.walk(directory):
             for dir_name in dirs:
                 if dir_name.endswith(".dir") or dir_name == "static":
                     continue
-                old_dir_path = os.path.join(root, dir_name)
-                new_dir_path = os.path.join(root, dir_name + ".dir")
+                full_path = os.path.join(root, dir_name)
+                # 计算路径深度
+                depth = full_path.count(os.sep)
+                dirs_to_rename.append((depth, root, dir_name))
+        
+        # 按深度降序排序，确保先处理深层目录
+        dirs_to_rename.sort(reverse=True, key=lambda x: x[0])
+        
+        # 然后统一重命名
+        for depth, root, dir_name in dirs_to_rename:
+            old_dir_path = os.path.join(root, dir_name)
+            new_dir_path = os.path.join(root, dir_name + ".dir")
+            print(f"  Renaming: {old_dir_path} -> {new_dir_path}")  # 调试输出
+            try:
                 os.rename(old_dir_path, new_dir_path)
-
+            except FileNotFoundError as e:
+                print(f"  Warning: Failed to rename {old_dir_path}: {e}")
 
     def generate_directory_listing(self, wiki_name: str, directory: str, depth: int):
         """
