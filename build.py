@@ -8,24 +8,6 @@ import re
 import traceback
 import shutil
 
-
-# def move_static_directory(directory):
-#     """
-#     遍历所有子目录的static目录，将其按原本的结构拷贝到.vuepress/public下
-#     """
-#     for root, dirs, files in os.walk(directory):
-#         for dir_name in dirs:
-#             if dir_name == "static":
-#                 static_dir_path = os.path.join(root, dir_name)
-#                 relative_path = os.path.relpath(static_dir_path, directory)
-#                 target_path = os.path.join(root_dir + "/../", ".vuepress/public", relative_path)
-#                 os.makedirs(target_path, exist_ok=True)
-#                 for file_name in files:
-#                     file_path = os.path.join(static_dir_path, file_name)
-#                     target_file_path = os.path.join(target_path, file_name)
-#                     os.rename(file_path, target_file_path)
-#                 os.rmdir(static_dir_path)
-
 class WikiGenerator:
     def __init__(self, root_dir):
         self.root_dir = root_dir
@@ -47,13 +29,16 @@ class WikiGenerator:
         for item in data["md_files"]:
             key = item["path"][:-3] + ".dir"
             p = self.get_realtive_path_of_wiki(wiki_name, item["path"])
-            item_m.setdefault(key, {
-                "title": item["name"],
-                "collapsable": False,
-                "children": [],
-            })["children"].append(
-                [p, "概述"] if not item["is_leaf"] else [p, item["name"]]
-            )
+            if item["is_leaf"]:
+                res.append([p, item["name"]])
+            else:
+                item_m.setdefault(key, {
+                    "title": item["name"],
+                    "collapsable": False,
+                    "children": [],
+                })["children"].append(
+                    [p, "概述"]
+                )
         for item in data["subdirs"]:
             children = item_m.setdefault(item["key"], {
                 "title": item["name"],
