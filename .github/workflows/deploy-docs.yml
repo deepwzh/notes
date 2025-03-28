@@ -23,7 +23,7 @@ jobs:
           fetch-depth: 0
 
       - name: 飞书文档同步
-        uses: docker://deepwzh/feishu2md
+        uses: docker://deepwzh/feishu2md:b3f528063b8f
         with:
           entrypoint: /bin/sh
           args: -c "mkdir -p /github/home/.config/feishu2md && echo '${{ vars.FEISHU2MD_CONFIG }}' | base64 -d > /github/home/.config/feishu2md/config.json && python3 build.py"
