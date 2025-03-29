@@ -17,6 +17,7 @@
       "url": "https://d4m8ldfqqc.feishu.cn/wiki/settings/7486795847243169795"
     }
   ],
+  "collapsable_depth": 2,
   "max_depth": 10,
   "nav": [
     {
@@ -40,7 +41,7 @@
     {
       "text": "计算机基础",
       "link": "",
-      "items": [
+      "children": [
         {
           "text": "计算机网络",
           "link": "/计算机网络/"
