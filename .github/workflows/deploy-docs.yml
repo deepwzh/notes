@@ -37,8 +37,6 @@ jobs:
         run: npm ci
 
       - name: 构建文档
-        env:
-          NODE_OPTIONS: --max_old_space_size=8192 --openssl-legacy-provider
         # 不要使用 Jekyll 处理该目录的内容，从而保留所有文件（例如以 _ 开头的文件）。
         run: |-
           npm run docs:build
