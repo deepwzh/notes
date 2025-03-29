@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+from dataclasses import field, dataclass
 import json
 import os
 import pathlib
@@ -8,39 +9,38 @@ import re
 import traceback
 import shutil
 
+@dataclass
+class WikiItem:
+    name: str
+    url: str
 
-# def move_static_directory(directory):
-#     """
-#     遍历所有子目录的static目录，将其按原本的结构拷贝到.vuepress/public下
-#     """
-#     for root, dirs, files in os.walk(directory):
-#         for dir_name in dirs:
-#             if dir_name == "static":
-#                 static_dir_path = os.path.join(root, dir_name)
-#                 relative_path = os.path.relpath(static_dir_path, directory)
-#                 target_path = os.path.join(root_dir + "/../", ".vuepress/public", relative_path)
-#                 os.makedirs(target_path, exist_ok=True)
-#                 for file_name in files:
-#                     file_path = os.path.join(static_dir_path, file_name)
-#                     target_file_path = os.path.join(target_path, file_name)
-#                     os.rename(file_path, target_file_path)
-#                 os.rmdir(static_dir_path)
+@dataclass
+class NavItem:
+    text: str
+    link: str
+    items: list["NavItem"]
+
+@dataclass
+class Config:
+    max_depth: int = 10
+    wiki: list[WikiItem] = field(default_factory=list)
+    nav: list[NavItem] = field(default_factory=list)
 
 class WikiGenerator:
-    def __init__(self, root_dir):
+    def __init__(self, root_dir: str, max_depth=10, nav: list[NavItem] = None):
         self.root_dir = root_dir
         # self.wiki_dir = os.path.join(root_dir, ".wiki")
         self.vuepress_dir = os.path.join(root_dir, ".vuepress")
         self.static_base_dir = os.path.join(self.vuepress_dir, "public", "wiki")
 
         self.roadmap_lists = []
-        self.max_depth = 10
+        self.max_depth = max_depth
+        self.nav = [] if nav is None else nav
 
-    
     def get_realtive_path_of_wiki(self, wiki_name, path: dict):
         base_path = self.get_wiki_dir(wiki_name)
         return str(pathlib.Path(os.path.join(self.root_dir, path)).relative_to(base_path))
-    
+
     def _generate_roadmap_siderbar(self, wiki_name: str, data: dict, depth: int):
         res = []
         item_m = {}
@@ -69,21 +69,13 @@ class WikiGenerator:
                     for item in item["md_files"]
                 ])
             else:
-                children.extend(self._generate_roadmap_siderbar(wiki_name, item, depth + 1)) 
-        
+                children.extend(self._generate_roadmap_siderbar(wiki_name, item, depth + 1))
+
         for key, value in item_m.items():
             res.append(value)
         return res
-    
+
     def generate_roadmap_siderbar(self, wiki_name: str, data: dict):
-        # res = [
-        #     "",
-        #     {
-        #         "title": wiki_name,
-        #         "collapsable": False,
-        #         "children": self._generate_roadmap_siderbar(wiki_name, data, 1)
-        #     }
-        # ]
         res = [""] + self._generate_roadmap_siderbar(wiki_name, data, 1)
 
         ts_code = f"export default {json.dumps(res, indent=4, ensure_ascii=False)};"
@@ -103,26 +95,37 @@ class WikiGenerator:
         items_str = ""
         for item in self.roadmap_lists:
             items_str += f"""
-        "/{item["name"]}/": {item["key"]}Siderbar,
+    "/{item["name"]}/": {item["key"]}Siderbar,
     """
             import_str += f"""import {item["key"]}Siderbar from "./sidebars/{item["key"]}Siderbar";\n"""
         data = f"""
-    import {{SidebarConfig4Multiple}} from "vuepress/config";
-    {import_str}
-    // @ts-ignore
-    export default {{
-    {items_str}
-        // 降级，默认根据文章标题渲染侧边栏
-        "/": "auto",
-    }} as SidebarConfig4Multiple;
+import {{SidebarConfig4Multiple}} from "vuepress/config";
+{import_str}
+// @ts-ignore
+export default {{
+{items_str}
+    // 降级，默认根据文章标题渲染侧边栏
+    "/": "auto",
+}} as SidebarConfig4Multiple;
     """
         file_path = os.path.join(self.vuepress_dir, "sidebar.ts")
         with open(file_path, 'w', encoding='utf-8') as f:
             f.write(data)
 
+    def generate_navbar(self):
+        """
+        生成navbar，从 self.nav 生成
+        """
+        ts_code = f'''import {{NavItem}} from "vuepress/config";
+
+export default {json.dumps(self.nav, indent=4, ensure_ascii=False)} as NavItem[];'''
+        file_path = os.path.join(self.vuepress_dir, 'navbar.ts')
+        with open(file_path, 'w', encoding='utf-8') as f:
+            f.write(ts_code)
+
     def get_wiki_dir(self, wiki_name: str):
         return os.path.join(self.root_dir, wiki_name)
-    
+
     def download_wiki(self, wiki_name: str, wiki_url: str):
         """
         下载wiki
@@ -145,7 +148,7 @@ class WikiGenerator:
         self.generate_roadmap_siderbar(wiki_name, data)
 
         self.move_static_directory(wiki_name)
-    
+
 
     def move_static_directory(self, wiki_name: str):
         """
@@ -184,10 +187,10 @@ class WikiGenerator:
                 # 计算路径深度
                 depth = full_path.count(os.sep)
                 dirs_to_rename.append((depth, root, dir_name))
-        
+
         # 按深度降序排序，确保先处理深层目录
         dirs_to_rename.sort(reverse=True, key=lambda x: x[0])
-        
+
         # 然后统一重命名
         for depth, root, dir_name in dirs_to_rename:
             old_dir_path = os.path.join(root, dir_name)
@@ -210,7 +213,7 @@ class WikiGenerator:
 
             print(f"Processing directory: {directory}")
             readme_path = os.path.join(directory, 'README.md')
-            
+
             # Read existing README content if it exists
             existing_content = ""
             if os.path.exists(readme_path):
@@ -218,7 +221,7 @@ class WikiGenerator:
                     with open(readme_path, 'r', encoding='utf-8') as f:
                         existing_content = f.read()
                     print(f"  Found existing README.md: {len(existing_content)} bytes")
-                        
+
                     # Remove any existing directory listing section if it exists (modified regex to capture optional newline)
                     pattern = r"(?:\n)?## 目录内容[\s\S]*?(?=\n##|\Z)"
                     existing_content = re.sub(pattern, "", existing_content)
@@ -249,20 +252,20 @@ class WikiGenerator:
                 item_path = os.path.join(directory, item)
                 if os.path.isdir(item_path) and not item.startswith('.') and item != 'static':
                     subdirs.append(item)
-            
+
             # if subdirs:
             #     content_listing += "### 子目录\n\n"
             #     for subdir in sorted(subdirs):
             #         content_listing += f"- [{subdir}](./{subdir}/)\n"
             #     content_listing += "\n"
             #     print(f"  Found {len(subdirs)} subdirectories")
-            
+
             # List markdown files
             md_files = []
             for item in dir_content:
                 if item.endswith('.md') and item != 'README.md':
                     md_files.append(item)
-            
+
             if md_files:
                 content_listing += "### 文档\n\n"
                 for md_file in sorted(md_files):
@@ -270,11 +273,11 @@ class WikiGenerator:
                     content_listing += f"- [{title}](./{md_file})\n"
                 content_listing += "\n"
                 print(f"  Found {len(md_files)} markdown files")
-            
+
             # If no items found, add a default message.
             # if not (subdirs or md_files):
             #     content_listing += "暂无内容\n\n"
-            
+
             # Always update README.md file
             try:
                 with open(readme_path, 'w', encoding='utf-8') as f:
@@ -283,7 +286,7 @@ class WikiGenerator:
                 print(f"  Updated {readme_path} ({len(final_content)} bytes written)")
             except Exception as e:
                 print(f"  Error writing to README.md: {e}")
-            
+
             res = {
                 "subdirs": [],
                 "key": directory,
@@ -294,7 +297,7 @@ class WikiGenerator:
             for subdir in subdirs:
                 subres = self.generate_directory_listing(wiki_name, os.path.join(directory, subdir), depth=1)
                 res["subdirs"].append(subres)
-        
+
             return res
         except Exception as e:
             print(f"Error processing directory {directory}: {e}")
@@ -304,6 +307,8 @@ def read_config():
     config_path = os.path.join(os.path.dirname(__file__), "config.json")
     with open(config_path, 'r', encoding='utf-8') as f:
         config = json.load(f)
+
+    config = Config(**config)
     return config
 
 if __name__ == "__main__":
@@ -312,8 +317,9 @@ if __name__ == "__main__":
     else:
         root_dir = "."
     config = read_config()
-    generator = WikiGenerator(root_dir)
-    for item in config["wiki"]:
-        wiki_name, wiki_url = item["name"], item["url"]
-        generator.generate_wiki(wiki_name, wiki_url)
+    generator = WikiGenerator(root_dir, max_depth=config.max_depth, nav=config.nav)
+    # for item in config.wiki:
+    #     wiki_name, wiki_url = item["name"], item["url"]
+    #     generator.generate_wiki(wiki_name, wiki_url)
     generator.generate_sidebar()
+    generator.generate_navbar()

@@ -16,5 +16,56 @@
       "name": "计算机网络",
       "url": "https://d4m8ldfqqc.feishu.cn/wiki/settings/7486795847243169795"
     }
+  ],
+  "max_depth": 10,
+  "nav": [
+    {
+      "text": "语言",
+      "link": "",
+      "items": [
+        {
+          "text": "Golang",
+            "link": "/Golang/"
+        },
+        {
+          "text": "Python",
+          "link": "/Python/"
+        },
+        {
+          "text": "C++",
+          "link": "/C++/"
+        }
+      ]
+    },
+    {
+      "text": "计算机基础",
+      "link": "",
+      "items": [
+        {
+          "text": "计算机网络",
+          "link": "/计算机网络/"
+        },
+        {
+          "text": "操作系统",
+          "link": "/操作系统/"
+        },
+        {
+          "text": "数据库",
+          "link": "/数据库/"
+        }
+      ]
+    },
+    {
+        "text": "云原生",
+        "link": "/云原生/"
+    },
+    {
+        "text": "Devops",
+        "link": "/Devops/"
+    },
+    {
+        "text": "关于作者",
+        "link": "/关于作者/"
+    }
   ]
 }

@@ -7,6 +7,7 @@ node_modules
 .vuepress/dist
 .vuepress/sidebars/
 .vuepress/sidebar.ts
+.vuepress/navbar.ts
 .vuepress/public/wiki/**/*
 git0/
 deploy/config.json

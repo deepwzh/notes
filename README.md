@@ -1,8 +1,7 @@
 ---
 permalink: /
 ---
-
-# deepwzh的技术笔记
+# 欢迎来到我的编程笔记小站
 
 > 作者：[deepwzh](https://github.com/deepwzh)
 >
