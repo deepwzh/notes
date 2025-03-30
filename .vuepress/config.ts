@@ -28,7 +28,7 @@ export default defineUserConfig({
   theme: defaultTheme({
     navbar,
     sidebar,
-    logo: "/logo.png",
+    // logo: "/logo.png",
 
     // lastUpdated: "最近更新",
       // themeConfig: {
