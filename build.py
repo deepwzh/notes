@@ -328,7 +328,7 @@ if __name__ == "__main__":
     else:
         root_dir = "."
     config = read_config()
-    max_workers = 6
+    max_workers = 3
     generator = WikiGenerator(root_dir,
         max_depth=config.max_depth,
         collapsible_depth=config.collapsible_depth,
