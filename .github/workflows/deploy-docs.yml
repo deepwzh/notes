@@ -27,6 +27,16 @@ jobs:
         with:
           entrypoint: /bin/sh
           args: -c "mkdir -p /github/home/.config/feishu2md && echo '${{ vars.FEISHU2MD_CONFIG }}' | base64 -d > /github/home/.config/feishu2md/config.json && python3 build.py"
+     
+      - name: 生成可下载资源包
+        uses: actions/upload-artifact@v3
+        with:
+          name: project-assets
+          path: |
+            .
+            !.vuepress/dist
+            !node_modules
+    
       - name: 设置 Node.js
         uses: actions/setup-node@v3
         with:
