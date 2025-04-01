@@ -8,6 +8,8 @@ import sys
 import re
 import traceback
 import shutil
+from concurrent.futures import ThreadPoolExecutor
+import threading
 
 @dataclass
 class WikiItem:
@@ -326,12 +328,21 @@ if __name__ == "__main__":
     else:
         root_dir = "."
     config = read_config()
+    max_workers = 6
     generator = WikiGenerator(root_dir,
         max_depth=config.max_depth,
         collapsible_depth=config.collapsible_depth,
         nav=config.nav)
-    for item in config.wiki:
-        wiki_name, wiki_url = item["name"], item["url"]
-        generator.generate_wiki(wiki_name, wiki_url)
+    with ThreadPoolExecutor(max_workers=max_workers) as executor:
+        futures = []
+        for item in config.wiki:
+            wiki_name, wiki_url = item["name"], item["url"]
+            # 提交任务到线程池
+            future = executor.submit(generator.generate_wiki, wiki_name, wiki_url)
+            futures.append(future)
+        
+        # 等待所有任务完成
+        for future in futures:
+            future.result()  # 这里会抛出异常如果有任务失败
     generator.generate_sidebar()
     generator.generate_navbar()

@@ -25,7 +25,7 @@
       "url": "https://d4m8ldfqqc.feishu.cn/wiki/settings/7488193305672351747"
     },
     {
-      "name": "C++",
+      "name": "Cpp",
       "url": "https://d4m8ldfqqc.feishu.cn/wiki/settings/7488211706603274259"
     },
     {
@@ -61,8 +61,8 @@
           "link": "/Python/"
         },
         {
-          "text": "C++",
-          "link": "/C++/"
+          "text": "Cpp",
+          "link": "/Cpp/"
         }
       ]
     },
