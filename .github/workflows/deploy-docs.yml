@@ -29,7 +29,7 @@ jobs:
           args: -c "mkdir -p /github/home/.config/feishu2md && echo '${{ vars.FEISHU2MD_CONFIG }}' | base64 -d > /github/home/.config/feishu2md/config.json && python3 build.py"
      
       - name: 生成可下载资源包
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: project-assets
           path: |
