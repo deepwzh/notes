@@ -6,8 +6,8 @@ on:
   push:
     branches:
       - main
-  # schedule:
-  #   - cron: '0 */2 * * *'  # 每小时运行一次，根据需求调整
+  schedule:
+    - cron: '0 0 * * *'  # 每小时运行一次，根据需求调整
   repository_dispatch:
       types: [feishu]
 permissions:

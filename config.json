@@ -15,13 +15,41 @@
     {
       "name": "计算机网络",
       "url": "https://d4m8ldfqqc.feishu.cn/wiki/settings/7486795847243169795"
+    },
+    {
+      "name": "杂项",
+      "url": "https://d4m8ldfqqc.feishu.cn/wiki/settings/7488188589390495763"
+    },
+    {
+      "name": "数据库",
+      "url": "https://d4m8ldfqqc.feishu.cn/wiki/settings/7488193305672351747"
+    },
+    {
+      "name": "C++",
+      "url": "https://d4m8ldfqqc.feishu.cn/wiki/settings/7488211706603274259"
+    },
+    {
+      "name": "前端开发",
+      "url": "https://d4m8ldfqqc.feishu.cn/wiki/settings/7488188010153000964"
+    },
+    {
+      "name": "云原生",
+      "url": "https://d4m8ldfqqc.feishu.cn/wiki/settings/7487435801790267420"
+    },
+    {
+      "name": "AIGC",
+      "url": "https://d4m8ldfqqc.feishu.cn/wiki/settings/7487435283856637980"
+    },
+    {
+      "name": "Python",
+      "url": "https://d4m8ldfqqc.feishu.cn/wiki/settings/7488188359840989188"
     }
   ],
   "collapsible_depth": 2,
   "max_depth": 10,
   "nav": [
     {
-      "text": "语言",
+      "text": "后端开发",
       "link": "",
       "items": [
         {
@@ -37,6 +65,14 @@
           "link": "/C++/"
         }
       ]
+    },
+    {
+      "text": "杂项",
+      "link": "/杂项/"
+    },
+    {
+      "text": "前端开发",
+      "link": "/前端开发/"
     },
     {
       "text": "计算机基础",
@@ -63,6 +99,10 @@
     {
         "text": "Devops",
         "link": "/Devops/"
+    },
+    {
+        "text": "AIGC",
+        "link": "/AIGC/"
     },
     {
         "text": "关于作者",
