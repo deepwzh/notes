@@ -34,6 +34,9 @@ jobs:
           name: project-assets
           path: |
             .
+            .vuepress/sidebars
+            .vuepress/sidebar.ts
+            .vuepress/public/wiki
             !.vuepress/dist
             !node_modules
     
