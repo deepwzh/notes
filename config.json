@@ -51,7 +51,7 @@
     {
       "text": "后端开发",
       "link": "",
-      "items": [
+      "children": [
         {
           "text": "Golang",
             "link": "/Golang/"
