@@ -22,12 +22,34 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: 加载缓存
+        uses: actions/cache@v3
+        id: restore-cache
+        with:
+          path: |
+            .
+            !.vuepress/dist
+            !node_modules
+          key: ${{ runner.os }}-project-${{ hashFiles('**') }}
+          restore-keys: |
+            ${{ runner.os }}-project-
+
       - name: 飞书文档同步
         uses: docker://deepwzh/feishu2md:v0.0.1
         with:
           entrypoint: /bin/sh
           args: -c "mkdir -p /github/home/.config/feishu2md && echo '${{ vars.FEISHU2MD_CONFIG }}' | base64 -d > /github/home/.config/feishu2md/config.json && python3 build.py"
      
+      - name: 保存缓存
+        if: steps.restore-cache.outputs.cache-hit != 'true'
+        uses: actions/cache@v3
+        with:
+          path: |
+            .
+            !.vuepress/dist
+            !node_modules
+          key: ${{ runner.os }}-project-${{ hashFiles('**') }}
+      
       - name: 生成可下载资源包
         uses: actions/upload-artifact@v4
         with:

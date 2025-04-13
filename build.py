@@ -128,7 +128,6 @@ export default {json.dumps(self.nav, indent=4, ensure_ascii=False)} as NavItem[]
         """
         下载wiki
         """
-        shutil.rmtree(self.get_wiki_dir(wiki_name), ignore_errors=True)
         os.system(f"""./deploy/feishu2md dl --wiki -o output_directory "{wiki_url}" """)
 
     def generate_wiki(self, wiki_name: str, wiki_url: str):
