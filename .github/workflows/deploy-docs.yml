@@ -34,8 +34,6 @@ jobs:
             !.vuepress/dist
             !node_modules
           key: ${{ runner.os }}-project-notes
-          restore-keys: |
-            ${{ runner.os }}-project-
 
       - name: 飞书文档同步
         uses: docker://deepwzh/feishu2md:v0.0.1
@@ -45,22 +43,13 @@ jobs:
      
       - name: 保存缓存
         if: always() && steps.restore-cache.outputs.cache-hit != 'true'
-        uses: actions/cache@v4
+        uses: actions/cache/save@v4
         with:
           path: |
             .
             !.vuepress/dist
             !node_modules
           key: ${{ steps.restore-cache.outputs.cache-primary-key }}
-      - name: Always Save Prime Numbers
-        id: cache-prime-numbers-save
-        
-        uses: actions/cache/save@v4
-        with:
-          key: ${{ steps.cache-prime-numbers-restore.outputs.cache-primary-key }}
-          path: |
-            path/to/dependencies
-            some/other/dependencies
       
       - name: 生成可下载资源包
         uses: actions/upload-artifact@v4
