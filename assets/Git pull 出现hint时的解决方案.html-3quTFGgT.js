@@ -1,0 +1,13 @@
+import{_ as l,c as n,a as e,o as s}from"./app-DFLRG_mI.js";const a={};function t(r,i){return s(),n("div",null,i[0]||(i[0]=[e(`<h1 id="git-pull-出现-hint-时的解决方案" tabindex="-1"><a class="header-anchor" href="#git-pull-出现-hint-时的解决方案"><span>Git pull 出现 hint 时的解决方案</span></a></h1><p>当我们 git pull，有时会出现如下的提示</p><div class="language-text line-numbers-mode" data-highlighter="prismjs" data-ext="text"><pre><code><span class="line">hint: Pulling without specifying how to reconcile divergent branches is</span>
+<span class="line">hint: discouraged. You can squelch this message by running one of the following</span>
+<span class="line">hint: commands sometime before your next pull:</span>
+<span class="line">hint: </span>
+<span class="line">hint:   git config pull.rebase false  # merge (the default strategy)</span>
+<span class="line">hint:   git config pull.rebase true   # rebase</span>
+<span class="line">hint:   git config pull.ff only       # fast-forward only</span>
+<span class="line">hint: </span>
+<span class="line">hint: You can replace &quot;git config&quot; with &quot;git config --global&quot; to set a default</span>
+<span class="line">hint: preference for all repositories. You can also pass --rebase, --no-rebase,</span>
+<span class="line">hint: or --ff-only on the command line to override the configured default per</span>
+<span class="line">hint: invocation.</span>
+<span class="line"></span></code></pre><div class="line-numbers" aria-hidden="true" style="counter-reset:line-number 0;"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><p>简单的说，git pull 默认不带参数时，会有多种可能的选择，git 需要我们去显示指定一下</p><ul><li><p>本地和远程都基于某分支做了不同的修改，且无冲突</p><ul><li>若希望产生额外的合并 log <ul><li>git config pull.rebase false</li></ul></li><li>若不希望产生额外的合并 log <ul><li>git config pull.rebase true</li></ul></li><li>若希望拒绝自动合并 <ul><li>git config pull.ff only</li></ul></li></ul></li><li><p>本地没有做修改</p><ul><li>选哪种都一样</li></ul></li></ul><p>个人建议使用 <code>git config pull.rebase true</code>,这样会自动合并本地和远程提交，且没有额外的多余 log 信息</p>`,6)]))}const c=l(a,[["render",t]]),p=JSON.parse('{"path":"/%E6%9D%82%E9%A1%B9/%E7%89%88%E6%9C%AC%E7%AE%A1%E7%90%86%E5%B7%A5%E5%85%B7/Git/Git%20pull%20%E5%87%BA%E7%8E%B0hint%E6%97%B6%E7%9A%84%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88.html","title":"Git pull 出现 hint 时的解决方案","lang":"zh-CN","frontmatter":{},"headers":[],"git":{},"filePathRelative":"杂项/版本管理工具/Git/Git pull 出现hint时的解决方案.md"}');export{c as comp,p as data};
