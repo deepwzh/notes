@@ -1,0 +1,95 @@
+import{_ as s,c as n,a,o as l}from"./app-CxmxnU5Q.js";const i={};function r(o,e){return l(),n("div",null,e[0]||(e[0]=[a(`<h1 id="protobuf" tabindex="-1"><a class="header-anchor" href="#protobuf"><span>Protobuf</span></a></h1><h2 id="标量值类型" tabindex="-1"><a class="header-anchor" href="#标量值类型"><span>标量值类型</span></a></h2><h2 id="默认值" tabindex="-1"><a class="header-anchor" href="#默认值"><span>默认值</span></a></h2><p>解析消息后，如果经过编码的消息不包含特定单数元素，则解析对象中的相应字段将设置为该字段的默认值。这些默认值因类型而异：</p><ul><li>对于字符串，默认值为空字符串。</li><li>对于字节，默认值为空字节。</li><li>对于布尔值，默认值为 false。</li><li>对于数值类型，默认值为零。</li><li>对于<a href="https://developers.google.com/protocol-buffers/docs/proto3?hl=zh-cn#enum" target="_blank" rel="noopener noreferrer">枚举</a>，默认值为<strong>第一个定义的枚举值</strong>，<strong>必须为 0</strong>。</li><li>对于消息字段，系统不会设置此字段。其确切值取决于语言。如需了解详情，请参阅<a href="https://developers.google.com/protocol-buffers/docs/reference/overview?hl=zh-cn" target="_blank" rel="noopener noreferrer">生成的代码指南</a>。</li></ul><p>重复字段的默认值为空（通常，采用相应语言的空列表）。</p><p>请注意，对于标量消息字段，在解析消息后，就无从判断字段是明确设为默认值（例如布尔值是否设为 <code>false</code>）还是根本不设置：在定义消息类型时，您应该记住这一点。例如，如果您不想让某项行为默认发生，可设置一个布尔值，将其设为 <code>false</code> 时开启该行为。另请注意，如果标量消息字段已设置为默认值，则该值不会通过序列化进行序列化。</p><p>请参阅<a href="https://developers.google.com/protocol-buffers/docs/reference/overview?hl=zh-cn" target="_blank" rel="noopener noreferrer">您所用语言的生成代码指南</a>，详细了解生成的代码中默认值的工作原理。</p><h2 id="枚举" tabindex="-1"><a class="header-anchor" href="#枚举"><span>枚举</span></a></h2><p>在定义消息类型时，您可能希望它的某个字段仅具有一个预定义的值列表。例如，假设您想要为每个 <code>SearchRequest</code> 添加一个 <code>corpus</code> 字段，其中正文可以是 <code>UNIVERSAL</code>、<code>WEB</code>、<code>IMAGES</code>、<code>LOCAL</code>、<code>NEWS</code>、<code>PRODUCTS</code> 或 <code>VIDEO</code>。为此，您只需在消息定义中添加 <code>enum</code> 并针对每个可能的值添加一个常量。</p><p>在以下示例中，我们添加了一个名为 <code>Corpus</code> 的 <code>enum</code>（包含所有可能的值）和 <code>Corpus</code> 类型的字段：</p><div class="language-text line-numbers-mode" data-highlighter="prismjs" data-ext="text"><pre><code><span class="line">enum Corpus {</span>
+<span class="line">  CORPUS_UNSPECIFIED = 0;</span>
+<span class="line">  CORPUS_UNIVERSAL = 1;</span>
+<span class="line">  CORPUS_WEB = 2;</span>
+<span class="line">  CORPUS_IMAGES = 3;</span>
+<span class="line">  CORPUS_LOCAL = 4;</span>
+<span class="line">  CORPUS_NEWS = 5;</span>
+<span class="line">  CORPUS_PRODUCTS = 6;</span>
+<span class="line">  CORPUS_VIDEO = 7;</span>
+<span class="line">}</span>
+<span class="line">message SearchRequest {</span>
+<span class="line">  string query = 1;</span>
+<span class="line">  int32 page_number = 2;</span>
+<span class="line">  int32 result_per_page = 3;</span>
+<span class="line">  Corpus corpus = 4;</span>
+<span class="line">}</span>
+<span class="line"></span></code></pre><div class="line-numbers" aria-hidden="true" style="counter-reset:line-number 0;"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><p>如您所见，<code>Corpus</code> 枚举的第一个常量映射到零：每个枚举定义<strong>必须</strong>包含一个映射到零的第一个常量作为其第一个元素。原因如下：</p><ul><li>必须有一个零值，以便我们可以使用 0 作为数字的<a href="https://developers.google.com/protocol-buffers/docs/proto3?hl=zh-cn#default" target="_blank" rel="noopener noreferrer">默认值</a>。</li><li>零值必须是第一个元素，以便与 <a href="https://developers.google.com/protocol-buffers/docs/proto?hl=zh-cn" target="_blank" rel="noopener noreferrer">proto2</a> 语义（其中第一个枚举值始终是默认值）兼容。</li></ul><p>您可以通过为不同的枚举常量分配相同的值来定义别名。为此，您需要将 <code>allow_alias</code> 选项设置为 <code>true</code>，否则协议编译器会在发现别名时生成错误消息。虽然所有别名值在反序列化期间都有效，但序列化时始终使用第一个值。</p><div class="language-text line-numbers-mode" data-highlighter="prismjs" data-ext="text"><pre><code><span class="line">enum EnumAllowingAlias {</span>
+<span class="line">  option allow_alias = true;</span>
+<span class="line">  EAA_UNSPECIFIED = 0;</span>
+<span class="line">  EAA_STARTED = 1;</span>
+<span class="line">  EAA_RUNNING = 1;</span>
+<span class="line">  EAA_FINISHED = 2;</span>
+<span class="line">}</span>
+<span class="line">enum EnumNotAllowingAlias {</span>
+<span class="line">  ENAA_UNSPECIFIED = 0;</span>
+<span class="line">  ENAA_STARTED = 1;</span>
+<span class="line">  // ENAA_RUNNING = 1;  // Uncommenting this line will cause a compile error inside Google and a warning message outside.</span>
+<span class="line">  ENAA_FINISHED = 2;</span>
+<span class="line">}</span>
+<span class="line"></span></code></pre><div class="line-numbers" aria-hidden="true" style="counter-reset:line-number 0;"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><p>枚举器常量必须在 32 位整数范围内。由于 <code>enum</code> 值使用线上的<a href="https://developers.google.com/protocol-buffers/docs/encoding?hl=zh-cn" target="_blank" rel="noopener noreferrer">变体编码</a>，因此负值效率低下，因此不推荐使用。您可以在消息定义中定义 <code>enum</code>（如上例所示），也可在外部进行定义。这些 <code>enum</code> 可在 <code>.proto</code> 文件中的任何消息定义中重复使用。您还可以使用语法 <code>_MessageType_._EnumType_</code> 将一条消息中声明的 <code>enum</code> 类型用作其他消息中的字段类型。</p><p>在使用 <code>enum</code> 的 <code>.proto</code> 上运行协议缓冲区编译器时，生成的代码将具有用于 Java、Kotlin 或 C++ 的相应 <code>enum</code>，或用于 Python 的特殊 <code>EnumDescriptor</code> 类，该类用于在运行时生成的类中创建一组包含整数值的符号常量。</p><p><strong>注意</strong>：生成的代码可能受特定于语言的枚举器数量限制（一种语言为数千种）的限制。请查看您计划使用的语言的限制。</p><p>在反序列化期间，无法识别的枚举值将保留在消息中，但当消息反序列化时如何表示该值取决于语言。在支持开放式枚举类型（例如 C++ 和 Go）范围之外的语言中，未知枚举值仅存储为其底层整数表示形式。在 Java 等封闭枚举类型语言中，枚举中的大小写用于表示无法识别的值，您可以通过特殊访问器访问底层整数。在任一情况下，如果消息已序列化，则无法识别的值仍会与消息进行序列化。</p><p>如需详细了解如何在应用中使用消息 <code>enum</code>，请参阅<a href="https://developers.google.com/protocol-buffers/docs/reference/overview?hl=zh-cn" target="_blank" rel="noopener noreferrer">所选代码指南</a>（针对您选择的语言）。</p><h2 id="any" tabindex="-1"><a class="header-anchor" href="#any"><span>Any</span></a></h2><p>借助 <code>Any</code> 消息类型，您可以将消息作为嵌入式类型使用，而无需指定 .proto 定义。<code>Any</code> 包含任意序列化消息（如 <code>bytes</code>），以及作为全局唯一标识符并解析为消息类型的网址。如需使用 <code>Any</code> 类型，您需要<a href="https://developers.google.com/protocol-buffers/docs/proto3?hl=zh-cn#other" target="_blank" rel="noopener noreferrer">导入</a> <code>google/protobuf/any.proto</code>。</p><div class="language-text line-numbers-mode" data-highlighter="prismjs" data-ext="text"><pre><code><span class="line">import &quot;google/protobuf/any.proto&quot;;</span>
+<span class="line"></span>
+<span class="line">message ErrorStatus {</span>
+<span class="line">  string message = 1;</span>
+<span class="line">  repeated google.protobuf.Any details = 2;</span>
+<span class="line">}</span>
+<span class="line"></span></code></pre><div class="line-numbers" aria-hidden="true" style="counter-reset:line-number 0;"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><p>给定消息类型的默认类型网址为 <code>type.googleapis.com/_packagename_._messagename_</code>。</p><p>不同的语言实现将支持运行时库帮助程序以类型安全的方式打包和解压缩 <code>Any</code> 值。例如，在 Java 中，<code>Any</code> 类型将具有特殊的 <code>pack()</code> 和 <code>unpack()</code> 访问器，而在 C++ 中则有 <code>PackFrom()</code> 和 <code>UnpackTo()</code> 方法：</p><div class="language-text line-numbers-mode" data-highlighter="prismjs" data-ext="text"><pre><code><span class="line">// Storing an arbitrary message type in Any.</span>
+<span class="line">NetworkErrorDetails details = ...;</span>
+<span class="line">ErrorStatus status;</span>
+<span class="line">status.add_details()-&gt;PackFrom(details);</span>
+<span class="line"></span>
+<span class="line">// Reading an arbitrary message from Any.</span>
+<span class="line">ErrorStatus status = ...;</span>
+<span class="line">for (const google::protobuf::Any&amp; detail : status.details()) {</span>
+<span class="line">  if (detail.Is&lt;NetworkErrorDetails&gt;()) {</span>
+<span class="line">    NetworkErrorDetails network_error;</span>
+<span class="line">    detail.UnpackTo(&amp;network_error);</span>
+<span class="line">    ... processing network_error ...</span>
+<span class="line">  }</span>
+<span class="line">}</span>
+<span class="line"></span></code></pre><div class="line-numbers" aria-hidden="true" style="counter-reset:line-number 0;"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><p><strong>目前，与 <strong><strong>Any</strong></strong> 类型搭配使用的运行时库正在开发中</strong>。</p><p>如果您已熟悉 <a href="https://developers.google.com/protocol-buffers/docs/proto?hl=zh-cn" target="_blank" rel="noopener noreferrer">proto2 语法</a>，则 <code>Any</code> 可以保留任意 proto3 消息，类似于允许<a href="https://developers.google.com/protocol-buffers/docs/proto?hl=zh-cn#extensions" target="_blank" rel="noopener noreferrer">扩展程序</a>的 proto2 消息。</p><h2 id="oneof" tabindex="-1"><a class="header-anchor" href="#oneof"><span>Oneof</span></a></h2><div class="language-text line-numbers-mode" data-highlighter="prismjs" data-ext="text"><pre><code><span class="line">message SampleMessage {</span>
+<span class="line">  oneof test_oneof {</span>
+<span class="line">    string name = 4;</span>
+<span class="line">    SubMessage sub_message = 9;</span>
+<span class="line">  }</span>
+<span class="line">}</span>
+<span class="line"></span></code></pre><div class="line-numbers" aria-hidden="true" style="counter-reset:line-number 0;"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><ul><li>A oneof cannot be .<code>repeated</code></li></ul><p>Setting a oneof field will <strong>automatically clear all other members of the oneof</strong>. So if you set several oneof fields, only the <em>last</em> field you set will still have a value.</p><h3 id="tag-reuse-issues" tabindex="-1"><a class="header-anchor" href="#tag-reuse-issues"><span>Tag Reuse Issues</span></a></h3><ul><li><strong>Move fields into or out of a oneof</strong>: You may lose some of your information (some fields will be cleared) after the message is serialized and parsed. However,** **<strong>you can safely move a single field into a new oneof and may be able to move multiple fields if it is known that only one is ever set</strong>. See <a href="https://protobuf.dev/programming-guides/proto3/#updating" target="_blank" rel="noopener noreferrer">Updating A Message Type</a> for further details.</li><li><strong>Delete a oneof field and add it back</strong>: This may clear your currently set oneof field after the message is serialized and parsed.</li><li><strong>Split or merge oneof</strong>: This has similar issues to moving regular fields.</li></ul><h2 id="未知字段" tabindex="-1"><a class="header-anchor" href="#未知字段"><span>未知字段</span></a></h2><p>未知字段是格式正确的协议缓冲区序列化数据，表示解析器无法识别的字段。例如，当旧二进制文件使用新字段解析新二进制文件发送的数据时，这些新字段将变为旧二进制文件中的未知字段。</p><p>最初，proto3 消息在解析期间始终舍弃未知字段，但在版本 3.5 中，我们重新引入了保留未知字段以匹配 proto2 行为。在版本 3.5 及更高版本中，未知字段在解析期间会保留并包含在序列化输出中。</p><h2 id="添加评论" tabindex="-1"><a class="header-anchor" href="#添加评论"><span>添加评论</span></a></h2><p>如需为 <code>.proto</code> 文件添加注释，请使用 C/C++ 样式的 <code>//</code> 和 <code>/* ... */</code> 语法。</p><div class="language-text line-numbers-mode" data-highlighter="prismjs" data-ext="text"><pre><code><span class="line">/* SearchRequest represents a search query, with pagination options to</span>
+<span class="line"> * indicate which results to include in the response. */</span>
+<span class="line"></span>
+<span class="line">message SearchRequest {</span>
+<span class="line">  string query = 1;</span>
+<span class="line">  int32 page_number = 2;  // Which page number do we want?</span>
+<span class="line">  int32 result_per_page = 3;  // Number of results to return per page.</span>
+<span class="line">}</span>
+<span class="line"></span></code></pre><div class="line-numbers" aria-hidden="true" style="counter-reset:line-number 0;"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><h2 id="预留值" tabindex="-1"><a class="header-anchor" href="#预留值"><span>预留值</span></a></h2><p>如果您通过完全移除某个枚举条目或将其注释掉以<a href="https://developers.google.com/protocol-buffers/docs/proto3?hl=zh-cn#updating" target="_blank" rel="noopener noreferrer">更新</a>某个枚举类型，那么将来的用户在对该类型进行更新时可以重复使用相应的数值。如果用户日后加载同一 <code>.proto</code> 的旧版本（包括数据损坏、隐私 bug 等），这可能会导致严重问题。确保不会发生这种情况的一种方法是，指定已删除条目的数值（和/或名称，也可能导致 JSON 序列化问题）为 <code>reserved</code>。如果任何未来用户尝试使用这些标识符，协议缓冲区编译器就会抱怨。您可以使用 <code>max</code> 关键字指定预留的数值范围，使其达到可能的最大值。</p><div class="language-text line-numbers-mode" data-highlighter="prismjs" data-ext="text"><pre><code><span class="line">enum Foo {</span>
+<span class="line">  reserved 2, 15, 9 to 11, 40 to max;</span>
+<span class="line">  reserved &quot;FOO&quot;, &quot;BAR&quot;;</span>
+<span class="line">}</span>
+<span class="line"></span></code></pre><div class="line-numbers" aria-hidden="true" style="counter-reset:line-number 0;"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><p>请注意，您不能在同一 <code>reserved</code> 语句中混用字段名称和数值。</p><h2 id="嵌套类型" tabindex="-1"><a class="header-anchor" href="#嵌套类型"><span>嵌套类型</span></a></h2><p>您可以在其他消息类型中定义和使用消息类型，如以下示例所示：<code>Result</code> 消息在 <code>SearchResponse</code> 消息中定义：</p><div class="language-text line-numbers-mode" data-highlighter="prismjs" data-ext="text"><pre><code><span class="line">message SearchResponse {</span>
+<span class="line">  message Result {</span>
+<span class="line">    string url = 1;</span>
+<span class="line">    string title = 2;</span>
+<span class="line">    repeated string snippets = 3;</span>
+<span class="line">  }</span>
+<span class="line">  repeated Result results = 1;</span>
+<span class="line">}</span>
+<span class="line"></span></code></pre><div class="line-numbers" aria-hidden="true" style="counter-reset:line-number 0;"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><p>如果您要在父消息类型之外重复使用此消息类型，请将其引用为 <code>_Parent_._Type_</code>：</p><div class="language-text line-numbers-mode" data-highlighter="prismjs" data-ext="text"><pre><code><span class="line">message SomeOtherMessage {</span>
+<span class="line">  SearchResponse.Result result = 1;</span>
+<span class="line">}</span>
+<span class="line"></span></code></pre><div class="line-numbers" aria-hidden="true" style="counter-reset:line-number 0;"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><p>您可以根据需要嵌套深层消息：</p><div class="language-text line-numbers-mode" data-highlighter="prismjs" data-ext="text"><pre><code><span class="line">message Outer {                  // Level 0</span>
+<span class="line">  message MiddleAA {  // Level 1</span>
+<span class="line">    message Inner {   // Level 2</span>
+<span class="line">      int64 ival = 1;</span>
+<span class="line">      bool  booly = 2;</span>
+<span class="line">    }</span>
+<span class="line">  }</span>
+<span class="line">  message MiddleBB {  // Level 1</span>
+<span class="line">    message Inner {   // Level 2</span>
+<span class="line">      int32 ival = 1;</span>
+<span class="line">      bool  booly = 2;</span>
+<span class="line">    }</span>
+<span class="line">  }</span>
+<span class="line">}</span>
+<span class="line"></span></code></pre><div class="line-numbers" aria-hidden="true" style="counter-reset:line-number 0;"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><h2 id="map" tabindex="-1"><a class="header-anchor" href="#map"><span>Map</span></a></h2><div class="language-text line-numbers-mode" data-highlighter="prismjs" data-ext="text"><pre><code><span class="line">map&lt;key_type, value_type&gt; map_field = N;</span>
+<span class="line">map&lt;string, Project&gt; projects = 3;</span>
+<span class="line"></span></code></pre><div class="line-numbers" aria-hidden="true" style="counter-reset:line-number 0;"><div class="line-number"></div><div class="line-number"></div></div></div><ul><li>映射字段不能为 <code>repeated</code>。</li><li>映射值的线格式格式和映射迭代顺序尚未定义，因此您不能指望 Map 想按特定顺序排列。</li><li>When generating text format for a , maps are sorted by key. Numeric keys are sorted numerically.<code>.proto</code></li></ul><h2 id="参考资料" tabindex="-1"><a class="header-anchor" href="#参考资料"><span>参考资料</span></a></h2><p>https://protobuf.dev/programming-guides/proto3/#oneof</p>`,57)]))}const c=s(i,[["render",r]]),t=JSON.parse('{"path":"/%E6%9D%82%E9%A1%B9/Protobuf.html","title":"Protobuf","lang":"zh-CN","frontmatter":{},"headers":[{"level":2,"title":"标量值类型","slug":"标量值类型","link":"#标量值类型","children":[]},{"level":2,"title":"默认值","slug":"默认值","link":"#默认值","children":[]},{"level":2,"title":"枚举","slug":"枚举","link":"#枚举","children":[]},{"level":2,"title":"Any","slug":"any","link":"#any","children":[]},{"level":2,"title":"Oneof","slug":"oneof","link":"#oneof","children":[{"level":3,"title":"Tag Reuse Issues","slug":"tag-reuse-issues","link":"#tag-reuse-issues","children":[]}]},{"level":2,"title":"未知字段","slug":"未知字段","link":"#未知字段","children":[]},{"level":2,"title":"添加评论","slug":"添加评论","link":"#添加评论","children":[]},{"level":2,"title":"预留值","slug":"预留值","link":"#预留值","children":[]},{"level":2,"title":"嵌套类型","slug":"嵌套类型","link":"#嵌套类型","children":[]},{"level":2,"title":"Map","slug":"map","link":"#map","children":[]},{"level":2,"title":"参考资料","slug":"参考资料","link":"#参考资料","children":[]}],"git":{},"filePathRelative":"杂项/Protobuf.md"}');export{c as comp,t as data};
