@@ -1,0 +1,16 @@
+import{_ as s,c as a,a as e,o as l}from"./app-Dxy_proJ.js";const p={};function i(t,n){return l(),a("div",null,n[0]||(n[0]=[e(`<h1 id="触发方式" tabindex="-1"><a class="header-anchor" href="#触发方式"><span>触发方式</span></a></h1><h2 id="概述" tabindex="-1"><a class="header-anchor" href="#概述"><span>概述</span></a></h2><p>流水线支持的触发方式：</p><ul><li>push</li><li>定时触发</li><li>通过回调触发</li><li>手动触发</li></ul><h2 id="示例" tabindex="-1"><a class="header-anchor" href="#示例"><span>示例</span></a></h2><div class="language-yaml line-numbers-mode" data-highlighter="prismjs" data-ext="yml"><pre><code><span class="line"><span class="token key atrule">name</span><span class="token punctuation">:</span> 部署文档</span>
+<span class="line"></span>
+<span class="line"><span class="token key atrule">on</span><span class="token punctuation">:</span></span>
+<span class="line">  <span class="token comment"># 手动触发</span></span>
+<span class="line">  <span class="token key atrule">workflow_dispatch</span><span class="token punctuation">:</span> <span class="token punctuation">{</span><span class="token punctuation">}</span></span>
+<span class="line">  <span class="token comment"># push的时触发 </span></span>
+<span class="line">  <span class="token key atrule">push</span><span class="token punctuation">:</span></span>
+<span class="line">    <span class="token key atrule">branches</span><span class="token punctuation">:</span></span>
+<span class="line">      <span class="token punctuation">-</span> main</span>
+<span class="line">  <span class="token comment"># 定时触发</span></span>
+<span class="line">  <span class="token key atrule">schedule</span><span class="token punctuation">:</span></span>
+<span class="line">    <span class="token punctuation">-</span> <span class="token key atrule">cron</span><span class="token punctuation">:</span> <span class="token string">&#39;0 0 * * *&#39;</span>  <span class="token comment"># 每天零点运行一次（UTC+0)</span></span>
+<span class="line">  <span class="token comment"># webhook触发</span></span>
+<span class="line">  <span class="token key atrule">repository_dispatch</span><span class="token punctuation">:</span></span>
+<span class="line">      <span class="token key atrule">types</span><span class="token punctuation">:</span> <span class="token punctuation">[</span>feishu<span class="token punctuation">]</span></span>
+<span class="line"></span></code></pre><div class="line-numbers" aria-hidden="true" style="counter-reset:line-number 0;"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div>`,6)]))}const o=s(p,[["render",i]]),u=JSON.parse('{"path":"/Devops/Github/Github%20Action/%E8%A7%A6%E5%8F%91%E6%96%B9%E5%BC%8F.html","title":"触发方式","lang":"zh-CN","frontmatter":{},"headers":[{"level":2,"title":"概述","slug":"概述","link":"#概述","children":[]},{"level":2,"title":"示例","slug":"示例","link":"#示例","children":[]}],"git":{},"filePathRelative":"Devops/Github/Github Action/触发方式.md"}');export{o as comp,u as data};
